@@ -5,64 +5,94 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fomu ya Michango ya Harusi</title>
     <style>
-        body { font-family: sans-serif; background-color: #f0f2f5; display: flex; justify-content: center; padding: 20px; }
-        .form-card { background: #ffffff; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); max-width: 450px; width: 100%; }
+        body { font-family: sans-serif; background-color: #F0F2F5; display: flex; justify-content: center; padding: 10px; }
+        .form-card { background: #ffffff; padding: 25px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%; max-width: 450px; }
         h2 { text-align: center; color: #1a365d; margin-bottom: 5px; }
         p.subtitle { text-align: center; font-size: 14px; color: #4a5568; margin-bottom: 20px; }
-        .payment-info { background: #e6fffa; border-left: 4px solid #319795; padding: 12px; margin-bottom: 20px; font-size: 13px; }
+        .payment-info { background: #e6fffa; border-left: 4px solid #319795; padding: 12px; font-size: 13px; margin-bottom: 15px; border-radius: 4px; }
         .form-group { margin-bottom: 15px; }
         label { font-weight: 600; display: block; margin-bottom: 5px; font-size: 14px; }
         input, select, textarea { width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; box-sizing: border-box; }
-        button { width: 100%; background: #319795; color: white; border: none; padding: 12px; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; }
+        button { width: 100%; background: #319795; color: white; border: none; padding: 12px; border-radius: 6px; font-weight: bold; font-size: 16px; cursor: pointer; }
         .status-msg { margin-top: 15px; text-align: center; font-weight: bold; }
     </style>
 </head>
 <body>
+
 <div class="form-card">
     <h2>Michango ya Harusi 💍</h2>
     <p class="subtitle">Harusi ya Juma & Amina</p>
+    
     <div class="payment-info">
         <strong>Taarifa za Malipo:</strong><br>
         • M-Pesa: 0712 345 678 (Juma Ally)<br>
         • CRDB Bank: 0123456789 (Juma Ally)
     </div>
+
     <form id="weddingForm">
-        <div class="form-group"><label>Jina Buili *</label><input type="text" id="name" name="name" required placeholder="Ingiza jina lako"></div>
-        <div class="form-group"><label>Namba ya Simu / WhatsApp *</label><input type="tel" id="phone" name="phone" required placeholder="07XXXXXXXX"></div>
-        <div class="form-group"><label>Kiasi cha Mchango/Ahadi (TSh) *</label><input type="number" id="amount" name="amount" required placeholder="mf. 50000"></div>
+        <div class="form-group">
+            <label>Jina Kamili *</label>
+            <input type="text" id="name" name="name" placeholder="William Richard Mathayo" required>
+        </div>
+
+        <div class="form-group">
+            <label>Namba ya Simu / WhatsApp *</label>
+            <input type="tel" id="phone" name="phone" placeholder="0634174407" required>
+        </div>
+
+        <div class="form-group">
+            <label>Kiasi cha Mchango/Ahadi (TSh) *</label>
+            <input type="number" id="amount" name="amount" placeholder="500000" required>
+        </div>
+
         <div class="form-group">
             <label>Hali ya Malipo *</label>
             <select id="status" name="status" required>
                 <option value="">-- Chagua Hali --</option>
                 <option value="Nimelipa Yote">Nimelipa Yote</option>
-                <option value="Advance">Nimeweka Advance</option>
-                <option value="Ahadi">Ni Ahadi</option>
+                <option value="Nimeweka Advance">Nimeweka Advance</option>
+                <option value="Ni Ahadi">Ni Ahadi</option>
             </select>
         </div>
-        <div class="form-group"><label>Ujumbe / Baraka</label><textarea id="message" name="message" rows="3" placeholder="Andika ujumbe wako..."></textarea></div>
+
+        <div class="form-group">
+            <label>Ujumbe / Baraka</label>
+            <textarea id="message" name="message" rows="3" placeholder="Safi sana"></textarea>
+        </div>
+
         <button type="submit" id="submitBtn">Wasilisha Mchango</button>
         <div id="statusMsg" class="status-msg"></div>
     </form>
 </div>
+
 <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbyp5hX7yzXBHUsKxIvYdrviEKICzxVM4-Iui3l05iL_DDjSGWKlw3yLGx9duDTPHctRbQ/exec';
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbyp5hX7yzXBHUsKxIvYdrviEKq-c3R2-W50zNfK9F1bYw1/exec'; // Weka URL yako kamili ya Google Script ikiwa imekatika
     const form = document.getElementById('weddingForm');
     const submitBtn = document.getElementById('submitBtn');
     const statusMsg = document.getElementById('statusMsg');
 
     form.addEventListener('submit', e => {
         e.preventDefault();
-        submitBtn.disabled = true; submitBtn.innerText = 'Inatuma...';
+        submitBtn.disabled = true;
+        submitBtn.innerText = 'Inatuma...';
+        statusMsg.innerText = '';
+
         fetch(scriptURL, { method: 'POST', body: new FormData(form)})
             .then(response => {
-                statusMsg.style.color = 'green'; statusMsg.innerText = 'Asante sana! Taarifa zimepokelewa vizuri.';
-                submitBtn.disabled = false; submitBtn.innerText = 'Wasilisha Mchango'; form.reset();
+                statusMsg.style.color = 'green';
+                statusMsg.innerText = 'Asante sana! Taarifa zako zimepokelewa.';
+                submitBtn.disabled = false;
+                submitBtn.innerText = 'Wasilisha Mchango';
+                form.reset();
             })
             .catch(error => {
-                statusMsg.style.color = 'red'; statusMsg.innerText = 'Kuna tatizo limetokea. Jaribu tena.';
-                submitBtn.disabled = false; submitBtn.innerText = 'Wasilisha Mchango';
+                statusMsg.style.color = 'red';
+                statusMsg.innerText = 'Kuna tatizo limetokea. Jaribu tena.';
+                submitBtn.disabled = false;
+                submitBtn.innerText = 'Wasilisha Mchango';
             });
     });
 </script>
+
 </body>
 </html>

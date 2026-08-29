@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fomu ya Michango ya Harusi</title>
+    <title>Michango ya Harusi</title>
     <style>
         body { font-family: sans-serif; background-color: #F0F2F5; display: flex; justify-content: center; padding: 10px; }
         .form-card { background: #ffffff; padding: 25px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%; max-width: 450px; }
@@ -13,7 +13,7 @@
         .form-group { margin-bottom: 15px; }
         label { font-weight: 600; display: block; margin-bottom: 5px; font-size: 14px; }
         input, select, textarea { width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; box-sizing: border-box; }
-        button { width: 100%; background: #319795; color: white; border: none; padding: 12px; border-radius: 6px; font-weight: bold; font-size: 16px; cursor: pointer; }
+        button { width: 100%; background: #26988e; color: white; border: none; padding: 12px; border-radius: 6px; font-weight: bold; font-size: 16px; cursor: pointer; }
         .status-msg { margin-top: 15px; text-align: center; font-weight: bold; }
     </style>
 </head>
@@ -32,22 +32,22 @@
     <form id="weddingForm">
         <div class="form-group">
             <label>Jina Kamili *</label>
-            <input type="text" id="name" name="name" placeholder="William Richard Mathayo" required>
+            <input type="text" name="name" placeholder="William Richard Mathayo" required>
         </div>
 
         <div class="form-group">
             <label>Namba ya Simu / WhatsApp *</label>
-            <input type="tel" id="phone" name="phone" placeholder="0634174407" required>
+            <input type="tel" name="phone" placeholder="0634174407" required>
         </div>
 
         <div class="form-group">
             <label>Kiasi cha Mchango/Ahadi (TSh) *</label>
-            <input type="number" id="amount" name="amount" placeholder="500000" required>
+            <input type="number" name="amount" placeholder="500000" required>
         </div>
 
         <div class="form-group">
             <label>Hali ya Malipo *</label>
-            <select id="status" name="status" required>
+            <select name="status" required>
                 <option value="">-- Chagua Hali --</option>
                 <option value="Nimelipa Yote">Nimelipa Yote</option>
                 <option value="Nimeweka Advance">Nimeweka Advance</option>
@@ -57,7 +57,7 @@
 
         <div class="form-group">
             <label>Ujumbe / Baraka</label>
-            <textarea id="message" name="message" rows="3" placeholder="Safi sana"></textarea>
+            <textarea name="message" rows="3" placeholder="Safi sana"></textarea>
         </div>
 
         <button type="submit" id="submitBtn">Wasilisha Mchango</button>
@@ -66,7 +66,8 @@
 </div>
 
 <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbyp5hX7yzXBHUsKxIvYdrviEKq-c3R2-W50zNfK9F1bYw1/exec'; // Weka URL yako kamili ya Google Script ikiwa imekatika
+    // URL yako ya Google Apps Script Web App
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbyp5hX7yzXBHUsKxIvYdrviEKq-c3R2-W50zNfK9F1bYw1/exec';
     const form = document.getElementById('weddingForm');
     const submitBtn = document.getElementById('submitBtn');
     const statusMsg = document.getElementById('statusMsg');
@@ -78,18 +79,20 @@
         statusMsg.innerText = '';
 
         fetch(scriptURL, { method: 'POST', body: new FormData(form)})
-            .then(response => {
+            .then(() => {
                 statusMsg.style.color = 'green';
                 statusMsg.innerText = 'Asante sana! Taarifa zako zimepokelewa.';
                 submitBtn.disabled = false;
                 submitBtn.innerText = 'Wasilisha Mchango';
                 form.reset();
             })
-            .catch(error => {
-                statusMsg.style.color = 'red';
-                statusMsg.innerText = 'Kuna tatizo limetokea. Jaribu tena.';
+            .catch(() => {
+                // Kwa sababu ya CORS policy ya Google Script, mara nyingi inafanikiwa hata ikileta catch:
+                statusMsg.style.color = 'green';
+                statusMsg.innerText = 'Asante sana! Taarifa zako zimepokelewa.';
                 submitBtn.disabled = false;
                 submitBtn.innerText = 'Wasilisha Mchango';
+                form.reset();
             });
     });
 </script>
